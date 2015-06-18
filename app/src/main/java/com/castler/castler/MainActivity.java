@@ -11,11 +11,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+//import com.google.zxing.integration.android.IntentIntegrator;
+//import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.Intents;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
 
     ToggleButton btnWhiteWin = null;
     ToggleButton btnWhiteLose = null;
@@ -100,18 +104,49 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onWhiteScanCodeClicked(View v) {
+        // Start new CaptureActivity for the barcode scanner
+        Intent intentScan = new Intent(this, CaptureActivity.class);
+        // The following makes it return after scanning a QR code
+        intentScan.setAction(Intents.Scan.ACTION);
+        //intentScan.addCategory(Intent.CATEGORY_DEFAULT);
+        intentScan.putExtra("SCAN_FORMATS", "QR_CODE");
 
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setMessage("Castler requires Barcode Scanner. Would you like to install it?");
-        integrator.initiateScan();
+        startActivityForResult(intentScan, REQUEST_CODE);
+        //IntentIntegrator integrator = new IntentIntegrator(this);
+        //integrator.setMessage("Castler requires Barcode Scanner. Would you like to install it?");
+        //integrator.initiateScan();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null) {
-            txtWhiteName.setText(scanResult.getContents());
+        String contents = "";
+        String formatName;
+        byte[] rawBytes;
+        int intentOrientation;
+        Integer orientation;
+        String errorCorrectionLevel;
 
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                contents = intent.getStringExtra("SCAN_RESULT");
+                formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
+                intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
+                orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
+                errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
+            }
+            else
+            {
+                // failed or canceled
+                return;
+            }
         }
-        // else continue with any other code you need in the method
+        else
+        {
+            // failed or canceled
+            return;
+        }
+
+
+        txtWhiteName.setText(contents);
     }
 }

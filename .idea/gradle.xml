@@ -10,6 +10,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/zxing-android" />
+            <option value="$PROJECT_DIR$/zxing-android-core" />
+            <option value="$PROJECT_DIR$/zxing-core" />
           </set>
         </option>
       </GradleProjectSettings>
