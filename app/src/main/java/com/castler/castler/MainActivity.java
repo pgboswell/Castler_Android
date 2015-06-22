@@ -1,50 +1,39 @@
 package com.castler.castler;
 
-import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.transition.Fade;
+import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 //import com.google.zxing.integration.android.IntentIntegrator;
 //import com.google.zxing.integration.android.IntentResult;
-import com.google.zxing.client.android.CaptureActivity;
-import com.google.zxing.client.android.Intents;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity implements ScanSessionCodeFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener, RecordGameFragment.OnFragmentInteractionListener{
 
-    public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
-
-    ToggleButton btnWhiteWin = null;
-    ToggleButton btnWhiteLose = null;
-    ToggleButton btnWhiteDraw = null;
-
-    ToggleButton btnBlackWin = null;
-    ToggleButton btnBlackLose = null;
-    ToggleButton btnBlackDraw = null;
-
-    TextView txtWhiteName = null;
-
-    String strWhiteName = null;
+    public ChessSession chessSession = null;
+    Fragment homeFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnWhiteWin = (ToggleButton) findViewById(R.id.btn_white_win);
-        btnWhiteLose = (ToggleButton) findViewById(R.id.btn_white_lose);
-        btnWhiteDraw = (ToggleButton) findViewById(R.id.btn_white_draw);
-        btnBlackWin = (ToggleButton) findViewById(R.id.btn_black_win);
-        btnBlackLose = (ToggleButton) findViewById(R.id.btn_black_lose);
-        btnBlackDraw = (ToggleButton) findViewById(R.id.btn_black_draw);
-        txtWhiteName = (TextView) findViewById(R.id.white_name);
+        // Add the first fragment into the layout
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        ScanSessionCodeFragment fragment = new ScanSessionCodeFragment();
+        fragmentTransaction.add(R.id.main_layout, fragment);
+        fragmentTransaction.commit();
+
     }
 
     @Override
@@ -69,84 +58,65 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onToggleClicked(View v) {
-        boolean[] checkedState = new boolean[6];
-        for (int i = 0; i < 6; i++) {
-            checkedState[i] = false;
-        }
+    @Override
+    public void onSessionScanned(String clubName, String sessionID) {
+        chessSession = new ChessSession();
+        chessSession.setClubName(clubName);
+        chessSession.setSessionID(sessionID);
 
-        if (v.getId() == R.id.btn_white_win) {
-            checkedState[0] = true;
-            checkedState[4] = true;
-        } else if (v.getId() == R.id.btn_white_lose) {
-            checkedState[1] = true;
-            checkedState[3] = true;
-        } else if (v.getId() == R.id.btn_white_draw) {
-            checkedState[2] = true;
-            checkedState[5] = true;
-        } else if (v.getId() == R.id.btn_black_win) {
-            checkedState[3] = true;
-            checkedState[1] = true;
-        } else if (v.getId() == R.id.btn_black_lose) {
-            checkedState[4] = true;
-            checkedState[0] = true;
-        } else if (v.getId() == R.id.btn_black_draw) {
-            checkedState[5] = true;
-            checkedState[2] = true;
-        }
+        // Switch to the home fragment
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, R.animator.slide_in_left, R.animator.slide_out_right);
 
-        btnWhiteWin.setChecked(checkedState[0]);
-        btnWhiteLose.setChecked(checkedState[1]);
-        btnWhiteDraw.setChecked(checkedState[2]);
-        btnBlackWin.setChecked(checkedState[3]);
-        btnBlackLose.setChecked(checkedState[4]);
-        btnBlackDraw.setChecked(checkedState[5]);
+        homeFragment = new HomeFragment();
+        fragmentTransaction.replace(R.id.main_layout, homeFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
-    public void onWhiteScanCodeClicked(View v) {
-        // Start new CaptureActivity for the barcode scanner
-        Intent intentScan = new Intent(this, CaptureActivity.class);
-        // The following makes it return after scanning a QR code
-        intentScan.setAction(Intents.Scan.ACTION);
-        //intentScan.addCategory(Intent.CATEGORY_DEFAULT);
-        intentScan.putExtra("SCAN_FORMATS", "QR_CODE");
+    @Override
+    public void onRecordNewGameClicked() {
+        // Switch to the record new game fragment
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, R.animator.slide_in_left, R.animator.slide_out_right);
 
-        startActivityForResult(intentScan, REQUEST_CODE);
-        //IntentIntegrator integrator = new IntentIntegrator(this);
-        //integrator.setMessage("Castler requires Barcode Scanner. Would you like to install it?");
-        //integrator.initiateScan();
+        RecordGameFragment fragment = new RecordGameFragment();
+        fragmentTransaction.replace(R.id.main_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        String contents = "";
-        String formatName;
-        byte[] rawBytes;
-        int intentOrientation;
-        Integer orientation;
-        String errorCorrectionLevel;
+    @Override
+    public void onCancelSession() {
+        getFragmentManager().popBackStack();
+    }
 
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                contents = intent.getStringExtra("SCAN_RESULT");
-                formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
-                intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
-                orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
-                errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
-            }
-            else
-            {
-                // failed or canceled
-                return;
-            }
+    @Override
+    public void onCancelRecordGame() {
+        // Switch to the home fragment
+        /*FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right);
+
+        fragmentManager.popBackStack();
+        //fragmentTransaction.replace(R.id.main_layout, homeFragment);
+        fragmentTransaction.commit();*/
+    }
+
+    @Override
+    public void onGameSent(Game gameResult) {
+        // Game was successfully sent. Go back to the previous fragment.
+        getFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            this.finish();
         }
-        else
-        {
-            // failed or canceled
-            return;
-        }
-
-
-        txtWhiteName.setText(contents);
     }
 }
