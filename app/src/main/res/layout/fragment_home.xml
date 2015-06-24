@@ -28,34 +28,29 @@
         android:id="@+id/textView6" />
 
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:id="@+id/scrollView"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <ListView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listView" />
+            android:id="@+id/listViewRecordedGames"
+            tools:listitem="@layout/game_list_item"
+            android:divider="@drawable/list_divider"
+            android:dividerHeight="1dip"
+            android:drawSelectorOnTop="true"
+            android:headerDividersEnabled="true"
+            android:footerDividersEnabled="true"
+            android:choiceMode="singleChoice" />
     </ScrollView>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit"
-            android:id="@+id/btnEditGame"
-            android:layout_weight=".5" />
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete"
-            android:id="@+id/btnDeleteGame"
-            android:layout_weight=".5" />
 
     </LinearLayout>
 
@@ -71,7 +66,7 @@
 
         <Button
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:text="Record New Game"
             android:id="@+id/btn_record_new_game"/>
 

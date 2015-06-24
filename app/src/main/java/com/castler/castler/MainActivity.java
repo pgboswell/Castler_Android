@@ -19,7 +19,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity implements ScanSessionCodeFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener, RecordGameFragment.OnFragmentInteractionListener{
 
     public ChessSession chessSession = null;
-    Fragment homeFragment = null;
+    HomeFragment homeFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements ScanSessionCodeFr
     public void onGameSent(Game gameResult) {
         // Game was successfully sent. Go back to the previous fragment.
         getFragmentManager().popBackStack();
+
+        homeFragment.addGameResult(gameResult);
     }
 
     @Override

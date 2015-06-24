@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="?android:attr/listChoiceBackgroundIndicator">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="6/23/15 9:30 AM"
+                android:id="@+id/date_time"
+                android:layout_marginLeft="10dip"
+            android:layout_marginTop="2dip"
+            android:layout_marginBottom="2dip" />
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_marginTop="2dip"
+                android:layout_marginBottom="2dip">
+
+                <ImageView
+                    android:layout_width="16dip"
+                    android:layout_height="16dip"
+                    android:id="@+id/imageView2"
+                    android:src="@drawable/white_pawn"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginRight="5dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Oliver Boswell"
+                    android:id="@+id/white_name"
+                    android:layout_column="1"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginRight="5dip"
+                    android:gravity="center_vertical" />
+
+                <RelativeLayout
+                    android:layout_width="10dip"
+                    android:layout_height="10dip"
+                    android:background="@drawable/win_background"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dip"
+                    android:id="@+id/white_result_dot"></RelativeLayout>
+
+            </LinearLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_marginTop="2dip"
+                android:layout_marginBottom="2dip">
+
+                <ImageView
+                    android:layout_width="16dip"
+                    android:layout_height="16dip"
+                    android:id="@+id/imageView3"
+                    android:src="@drawable/black_pawn"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginRight="5dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Ringo Starr"
+                    android:id="@+id/black_name"
+                    android:layout_column="1"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginRight="5dip"
+                    android:gravity="center_vertical" />
+
+                <RelativeLayout
+                    android:layout_width="10dip"
+                    android:layout_height="10dip"
+                    android:background="@drawable/lose_background"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dip"
+                    android:id="@+id/black_result_dot" />
+
+            </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:id="@+id/button_remove_game"
+        android:background="@drawable/remove_button_selector"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dip"
+        android:focusable="false"
+        style="?android:attr/borderlessButtonStyle"
+        android:clickable="true" />
+
+
+</LinearLayout>

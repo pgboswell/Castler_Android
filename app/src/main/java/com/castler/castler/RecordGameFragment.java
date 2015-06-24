@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.util.Calendar;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -255,6 +257,8 @@ public class RecordGameFragment extends Fragment implements View.OnClickListener
             gameResult.setResult(Game.GAME_RESULT_BLACK_WIN);
         else
             gameResult.setResult(Game.GAME_RESULT_DRAW);
+        Calendar calendar = Calendar.getInstance();
+        gameResult.setDate(calendar.getTime());
 
         WebAPIManager webAPIManager = new WebAPIManager(this);
         webAPIManager.sendGameResult(gameResult, this.getActivity());

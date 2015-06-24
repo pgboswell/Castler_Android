@@ -1,5 +1,7 @@
 package com.castler.castler;
 
+import java.util.Date;
+
 /**
  * Created by Paul on 6/22/2015.
  */
@@ -8,6 +10,7 @@ public class Game {
     private Player whitePlayer = null;
     private Player blackPlayer = null;
     private int result = 0;
+    private Date date;
 
     public static final int GAME_RESULT_WHITE_WIN = 0;
     public static final int GAME_RESULT_BLACK_WIN = 1;
@@ -35,5 +38,13 @@ public class Game {
 
     public void setResult(int result) {
         this.result = result;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
